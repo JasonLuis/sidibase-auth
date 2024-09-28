@@ -3,7 +3,7 @@
     border="md"
     class="pa-6 text-white mx-auto my-auto"
     color="#141518"
-    max-width="400"
+    min-width="400"
   >
     <h4 class="text-h5 font-weight-bold mb-4">User Login</h4>
 
@@ -26,11 +26,11 @@
       size="x-large"
       variant="flat"
       @click="clickButton"
-      :loading="isLoading"
-      :disabled="isLoading"
+      :loading="loading"
+      :disabled="loading"
       block
     >
-      Accept
+      Login
     </v-btn>
 
     <v-btn
@@ -40,36 +40,39 @@
       variant="outlined"
       block
     >
-      Your Preferences
+      Create Account
     </v-btn>
   </v-sheet>
 </template>
 
 <script setup lang="ts">
+
+const { signIn } = useAuth();
+
+
 const loading = ref<boolean>(false);
 
 const login = ref<string | undefined>(undefined);
 const password = ref<string | undefined>(undefined);
 
 const clickButton = async () => {
+  
   loading.value = true;
-  await resolveAfter2Seconds();
+  try {
+    const result = await signIn({
+    email: login.value,
+    password: password.value
+  }, {
+    callbackUrl: '/page2' 
+  });
+  }
+  catch (error) {
+    console.log("error", error);
+  }
+  
   loading.value = false;
-  console.log("dados", {
-    login: login.value,
-    password: password.value,
-  });
+
+  // console.log("result", result);
 };
-
-function resolveAfter2Seconds() {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve("resolved");
-    }, 2000);
-  });
-}
-
-const isLoading = computed(() => {
-  return loading.value;
-});
 </script>
+]

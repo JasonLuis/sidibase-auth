@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app color="#141418">
     <NuxtPage />
   </v-app>
 </template>
