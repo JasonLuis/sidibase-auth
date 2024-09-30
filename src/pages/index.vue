@@ -27,14 +27,14 @@
       variant="flat"
       @click="clickButton"
       :loading="loading"
-      :disabled="loading"
+      :disabled="loading || !login || !password"
       block
     >
       Login
     </v-btn>
 
     <v-btn
-      class="text-none text-black"
+      class="text-none text-black mb-4"
       color="red-accent-2"
       size="x-large"
       variant="outlined"
@@ -42,37 +42,59 @@
     >
       Create Account
     </v-btn>
+
+    <v-alert
+      color="error"
+      type="error"
+      variant="outlined"
+      v-if="isIncorrect"
+    > 
+      Incorrect login or password! 
+    </v-alert>
   </v-sheet>
 </template>
 
 <script setup lang="ts">
 
-const { signIn } = useAuth();
+const { signIn, token } = useAuth();
+const router = useRouter();
+
+
 
 
 const loading = ref<boolean>(false);
-
+const isIncorrect = ref<boolean>(false);
 const login = ref<string | undefined>(undefined);
 const password = ref<string | undefined>(undefined);
 
 const clickButton = async () => {
   
   loading.value = true;
+  isIncorrect.value = false;
   try {
-    const result = await signIn({
-    email: login.value,
-    password: password.value
-  }, {
-    callbackUrl: '/page2' 
-  });
+    await signIn({
+      email: login.value,
+      password: password.value
+    }, {
+      callbackUrl: '/info' 
+    });
   }
   catch (error) {
-    console.log("error", error);
+    console.log("error teste", error);
+    isIncorrect.value = true;
   }
-  
-  loading.value = false;
 
-  // console.log("result", result);
+  loading.value = false;
 };
+
+
+
+onMounted(() => {
+  console.log("token", token.value);
+  if(token.value) {
+    router.push('/info');
+  }
+});
+
 </script>
 ]

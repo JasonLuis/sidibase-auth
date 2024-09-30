@@ -22,6 +22,8 @@ const clickButton = async () => {
 }
 
 const out = async () => {
-    await signOut();
+    await signOut({
+        callbackUrl: '/'
+    });
 }
 </script>

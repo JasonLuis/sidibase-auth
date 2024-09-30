@@ -41,13 +41,11 @@ export default defineNuxtConfig({
       endpoints: {
         signIn: { path: 'auth/login', method: 'post' },
         signOut: { path: 'auth/logout', method: 'post' },
-
-        // signUp: { path: '/registration', method: 'post' },
-        getSession: { path: '/page2', method: 'get'  }
+        // signUp: { path: '/registration', method: 'post' }, 
+        getSession: { path: 'auth/manage/info', method: 'get' }, 
       },
       pages: {
         login: '/',
-
       },
       token: {
         maxAgeInSeconds: 60 * 60 * 24,    // token expiration 1d
